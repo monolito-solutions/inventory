@@ -1,0 +1,14 @@
+{
+  "order_id": "90c6316b-aa6c-4377-bfb5-ba2d40481bc2",
+  "customer_id": "fdc2db56-1eb8-4f7e-90b2-bca6d44af667",
+  "order_items": [
+    {
+      "product_id": "9cad4dc7-50c0-44d7-9ed9-3f887a9d565b",
+      "supplier_id": "987eba3c-ae2b-4382-86f9-7ea238733e05",
+      "name": "product1",
+      "description": "Test Desc",
+      "price": 33000.0,
+      "quantity": 5
+    }
+  ]
+}
