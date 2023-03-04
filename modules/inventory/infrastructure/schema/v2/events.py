@@ -17,7 +17,7 @@ class ProductPayload(Record):
     def dict(self):
         return str({k: str(v) for k, v in asdict(self).items()})
 
-class OrderCreatedPayload(Record):
+class InventoryCheckedPayload(Record):
     order_id = String()
     customer_id = String()
     order_date = String()
@@ -26,11 +26,11 @@ class OrderCreatedPayload(Record):
     order_total = Float()
     order_version = Long()
 
-class OrderCreatedEvent(Record):
+class InventoryCheckedEvent(Record):
     id = String(default=str(uuid.uuid4()))
     ingestion = Long(default=time_millis())
     specversion = Long(default=2)
-    data = OrderCreatedPayload()
+    data = InventoryCheckedPayload()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

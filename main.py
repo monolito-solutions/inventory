@@ -3,15 +3,13 @@ import uvicorn
 import asyncio
 from sqlalchemy.exc import OperationalError
 from infrastructure.consumers import subscribe_to_topic
-from modules.orders.application.events.events import EventOrderCreated
-from modules.orders.application.commands.commands import CommandCheckInventoryOrder
-from api.orders.endpoints import router as api_router
+from modules.inventory.application.events.events import EventInventoryChecked
+from modules.inventory.application.commands.commands import CommandDispatchOrder
 from api.errors.exceptions import BaseAPIException
 from api.errors.handlers import api_exeption_handler
 from config.db import Base, engine, initialize_base
 
 app = FastAPI()
-app.include_router(api_router)
 app.add_exception_handler(BaseAPIException, api_exeption_handler)
 
 
@@ -26,9 +24,9 @@ except OperationalError:
 async def app_startup():
     global tasks
     task1 = asyncio.ensure_future(subscribe_to_topic(
-        "order-events", "sub-orders", EventOrderCreated))
+        "order-events", "sub-orders", EventInventoryChecked))
     task2 = asyncio.ensure_future(subscribe_to_topic(
-        "order-commands", "sub-com-order-checkinventory", CommandCheckInventoryOrder))
+        "order-commands", "sub-com-order-checkinventory", CommandDispatchOrder))
     tasks.append(task1)
     tasks.append(task2)
 

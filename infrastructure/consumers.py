@@ -6,6 +6,7 @@ import aiopulsar
 import asyncio
 from pulsar.schema import *
 from utils import broker_host
+from modules.inventory.application.logic.inventory import check_inventory
 
 
 async def subscribe_to_topic(topic: str, subscription: str, schema: Record, consumer_type: _pulsar.ConsumerType = _pulsar.ConsumerType.Shared):
@@ -22,6 +23,11 @@ async def subscribe_to_topic(topic: str, subscription: str, schema: Record, cons
                     datos = mensaje.value()
                     print(f'\nEvent recibido: {datos}')
                     print(f"\nEvent data: {datos.data_payload}")
+                    print(f"\nEvent data order_items: {datos.data_payload.order_items}")
+                    if (datos.type == "CommandCheckInventory") :
+                        print(f'\nEvent type: {datos.type}')
+                        check_inventory(order=datos.data_payload)
+
                     await consumer.acknowledge(mensaje)
 
     except:

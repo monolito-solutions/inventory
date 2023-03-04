@@ -15,7 +15,7 @@ class ProductPayload(Record):
         return str({k: str(v) for k, v in asdict(self).items()})
 
 
-class OrderCreatedPayload(Record):
+class InventoryCheckedPayload(Record):
     id = String(default=str(uuid.uuid4()))
     order_id = String()
     customer_id = String()
@@ -37,15 +37,15 @@ class OrderCreatedPayload(Record):
         }
 
 
-class EventOrderCreated(Record):
+class EventInventoryChecked(Record):
     id = String(default=str(uuid.uuid4()))
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v2")
-    type = String(default="EventOrderCreated")
+    type = String(default="EventInventoryChecked")
     datacontenttype = String()
     service_name = String(default="orders.entregasalpes")
-    data_payload = OrderCreatedPayload
+    data_payload = InventoryCheckedPayload
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

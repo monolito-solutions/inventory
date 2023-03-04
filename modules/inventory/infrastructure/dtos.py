@@ -4,10 +4,16 @@ from config.db import Base
 class InventoryDTO(Base):
     __tablename__ = "inventory"
 
-    order_id = Column(String(36), primary_key=True, index=True)
-    customer_id = Column(String(36), index=True)
-    order_date = Column(String(100), index=True)
-    order_status = Column(String(100), index=True)
-    order_items = Column(Text(1000000), index=True)
-    order_total = Column(Float, index=True)
-    order_version = Column(Integer, index=True)
+    product_id = Column(String(36), primary_key=True, index=True)
+    product_name = Column(String(36), index=True)
+    storage_location = Column(String(36), index=True)
+    quantity = Column(Integer(), index=True)
+
+
+    def to_dict(self):
+        return {
+            "product_id": self.product_id,
+            "product_name": self.product_name,
+            "storage_location": self.storage_location,
+            "quantity": self.quantity,
+        }

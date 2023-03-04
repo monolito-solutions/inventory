@@ -108,9 +108,9 @@ services:
     restart: always
     environment:
       - MYSQL_DATABASE=inventory
-      - MYSQL_ROOT_PASSWORD=adminadmin
-       - MYSQL_USER=inventory_user
-       - MYSQL_PASSWORD=inventory_pwd
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USER=inventory_user
+      - MYSQL_PASSWORD=inventory_pwd
     profiles: ["db"]
     networks:
       - pulsar
@@ -133,5 +133,5 @@ services:
       - PULSAR_ADDRESS=broker
     ports:
       - '5001:5001'
-    links:
-      - db
+    networks:
+      - pulsar

@@ -2,8 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DB_USERNAME = "root"
-DB_PASSWORD = "adminadmin"
+DB_USERNAME = "inventory_user"
+DB_PASSWORD = "inventory_pwd"
 DB_HOSTNAME = "localhost"
 DB_NAME = "inventory"
 
@@ -18,10 +18,7 @@ Base = declarative_base()
 
 def get_db():
     db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    return db
 
 def get_base_metadata():
     return Base.metadata
