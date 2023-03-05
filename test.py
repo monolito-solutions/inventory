@@ -37,7 +37,8 @@ command = CommandDispatchOrder(
     time = utils.time_millis(),
     ingestion = utils.time_millis(),
     datacontenttype = DispatchOrderPayload.__name__,
-    data_payload = command_payload
+    data_payload = command_payload,
+    type = "CommandCheckInventory"
 )
 
 dispatcher = Dispatcher()
