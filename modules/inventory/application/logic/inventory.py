@@ -28,8 +28,7 @@ def check_inventory(order):
         print(f'\params.order_items: {params.order_items}')
 
         print("Iniciando validacion de productos")
-        for item in params.order_items:
-            print(f'\nitem: {item}')
+        for item in json.loads(params.order_items):
             inventory_tmp = repository.get_by_id(item["product_id"])
             print(f'\inventory: {inventory_tmp}')
             if(item["quantity"] <= inventory_tmp.quantity) :

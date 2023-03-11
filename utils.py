@@ -23,7 +23,7 @@ def millis_a_datetime(millis):
 
 
 def broker_host():
-    return os.getenv(PULSAR_ENV, default="localhost")
+    return os.getenv(PULSAR_ENV, default="10.128.0.3")
 
 
 def consultar_schema_registry(topic: str) -> dict:

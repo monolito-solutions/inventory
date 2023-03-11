@@ -1,0 +1,40 @@
+[1mdiff --git a/modules/inventory/application/logic/inventory.py b/modules/inventory/application/logic/inventory.py[m
+[1mindex 01c5e99..02769fd 100644[m
+[1m--- a/modules/inventory/application/logic/inventory.py[m
+[1m+++ b/modules/inventory/application/logic/inventory.py[m
+[36m@@ -28,8 +28,7 @@[m [mdef check_inventory(order):[m
+         print(f'\params.order_items: {params.order_items}')[m
+ [m
+         print("Iniciando validacion de productos")[m
+[31m-        for item in params.order_items:[m
+[31m-            print(f'\nitem: {item}')[m
+[32m+[m[32m        for item in json.loads(params.order_items):[m
+             inventory_tmp = repository.get_by_id(item["product_id"])[m
+             print(f'\inventory: {inventory_tmp}')[m
+             if(item["quantity"] <= inventory_tmp.quantity) :[m
+[1mdiff --git a/modules/inventory/infrastructure/repositories.py b/modules/inventory/infrastructure/repositories.py[m
+[1mindex 91e1a7b..3297687 100644[m
+[1m--- a/modules/inventory/infrastructure/repositories.py[m
+[1m+++ b/modules/inventory/infrastructure/repositories.py[m
+[36m@@ -11,7 +11,7 @@[m [mclass InventoryRepositorySQLAlchemy:[m
+     def get_by_id(self, id: UUID) -> Inventory:[m
+         try:[m
+             inventory_dto = self.db.query(InventoryDTO).filter_by(product_id=str(id)).one()[m
+[31m-            print(f'\get_by_id inventory_dto: {inventory_dto}')[m
+[32m+[m[32m            print(f'\get_by_id inventory_dto: {inventory_dto}\n\n\n\n\n')[m
+             return Inventory(**inventory_dto.to_dict())[m
+         except NoResultFound:[m
+             return None[m
+[1mdiff --git a/utils.py b/utils.py[m
+[1mindex 9c7fdfb..0fbce25 100644[m
+[1m--- a/utils.py[m
+[1m+++ b/utils.py[m
+[36m@@ -23,7 +23,7 @@[m [mdef millis_a_datetime(millis):[m
+ [m
+ [m
+ def broker_host():[m
+[31m-    return os.getenv(PULSAR_ENV, default="localhost")[m
+[32m+[m[32m    return os.getenv(PULSAR_ENV, default="10.128.0.3")[m
+ [m
+ [m
+ def consultar_schema_registry(topic: str) -> dict:[m
