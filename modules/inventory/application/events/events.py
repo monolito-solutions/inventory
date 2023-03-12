@@ -81,7 +81,7 @@ class EventErrorCheckingInventory(Record):
     type = String(default="ErrorCheckingInventory")
     datacontenttype = String()
     service_name = String(default="orders.entregasalpes")
-    data_payload = InventoryCheckedPayload
+    data_payload = ErrorCheckingInventoryPayload
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -117,7 +117,7 @@ class EventRevertInventory(Record):
     type = String(default="RevertInventory")
     datacontenttype = String()
     service_name = String(default="orders.entregasalpes")
-    data_payload = InventoryCheckedPayload
+    data_payload = RevertInventoryPayload
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
