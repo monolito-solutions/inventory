@@ -51,7 +51,7 @@ def revert_inventory(order):
         order_total = float(order.order_total),
         order_version = int(order.order_version)
     )
-    event_payload.order_status = "Ready to dispatch"
+    event_payload.order_status = "Error checking inventory"
 
     event = EventRevertInventory(
         time = utils.time_millis(),

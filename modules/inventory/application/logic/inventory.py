@@ -42,9 +42,9 @@ def check_inventory(order):
                 break
             
         if(order_is_ok == True):
-            order_success()
+            order_success(order)
         else:
-            order_error()
+            order_error(order)
         
         db.close()
     except IntegrityError:
