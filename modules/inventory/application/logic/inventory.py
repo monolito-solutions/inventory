@@ -32,6 +32,9 @@ def check_inventory(order):
         for item in json.loads(params.order_items):
             inventory_tmp = repository.get_by_id(item["product_id"])
             print(f'\inventory: {inventory_tmp}')
+            if inventory_tmp is None:
+                order_is_ok = False
+                break
             if(item["quantity"] <= inventory_tmp.quantity) :
                 print(f'\Si hay inventario para el producto: {item["product_id"]}')
                 inventory_tmp.quantity -= item["quantity"]
