@@ -1,6 +1,6 @@
 from config.db import get_db
 from fastapi import Depends
-from modules.inventory.application.events.events import InventoryCheckedPayload, ProductPayload, EventInventoryChecked
+from modules.inventory.application.events.events import InventoryCheckedPayload, ProductPayload, EventInventoryChecked, ErrorCheckingInventoryPayload, EventErrorCheckingInventory
 from modules.inventory.infrastructure.repositories import InventoryRepositorySQLAlchemy
 from modules.inventory.application.commands.commands import CommandDispatchOrder, DispatchOrderPayload
 from sqlalchemy.exc import IntegrityError
