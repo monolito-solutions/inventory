@@ -14,6 +14,7 @@ from modules.products.domain.entities import Product
 def check_inventory(order):
     try:
         order_is_ok = True
+        error_msg = ""
         db = get_db()
 
         params = Order(
@@ -34,6 +35,7 @@ def check_inventory(order):
             print(f'\inventory: {inventory_tmp}')
             if inventory_tmp is None:
                 order_is_ok = False
+                error_msg = "Product not found"
                 break
             if(item["quantity"] <= inventory_tmp.quantity) :
                 print(f'\Si hay inventario para el producto: {item["product_id"]}')
@@ -42,12 +44,13 @@ def check_inventory(order):
             else:
                 print(f'\Si NO hay inventario para el producto: {item["product_id"]}')
                 order_is_ok = False
+                error_msg = f"Not enough inventory: {item['product_id']}"
                 break
             
         if(order_is_ok == True):
             order_success(order)
         else:
-            order_error(order)
+            order_error(order, error_msg)
         
         db.close()
     except IntegrityError:
@@ -89,7 +92,7 @@ def order_success(order):
     dispatcher.publish_message(command, "order-commands")
 
 
-def order_error(order):
+def order_error(order, cause):
     event_payload = ErrorCheckingInventoryPayload(
         order_id = str(order.order_id),
         customer_id = str(order.customer_id),
@@ -99,7 +102,7 @@ def order_error(order):
         order_total = float(order.order_total),
         order_version = int(order.order_version)
     )
-    event_payload.order_status = "Error checking orders products"
+    event_payload.order_status = f"Order error: {cause}"
 
     event = EventErrorCheckingInventory(
         time = utils.time_millis(),
