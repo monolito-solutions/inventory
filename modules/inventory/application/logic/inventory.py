@@ -31,7 +31,12 @@ def check_inventory(order):
 
         print("Iniciando validacion de productos")
         for item in json.loads(params.order_items):
-            inventory_tmp = repository.get_by_id(item["product_id"])
+            try:
+                inventory_tmp = repository.get_by_id(item["product_id"])
+            except TypeError:
+                order_is_ok = False
+                error_msg = "Error Reading Products"
+                break
             print(f'\inventory: {inventory_tmp}')
             if inventory_tmp is None:
                 order_is_ok = False

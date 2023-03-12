@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DB_USERNAME = "inventory_user"
-DB_PASSWORD = "inventory_pwd"
-DB_HOSTNAME = "localhost"
+DB_USERNAME = "root"
+DB_PASSWORD = "adminadmin123"
+DB_HOSTNAME = "35.225.27.149"
 DB_NAME = "inventory"
 
 SQLALCHEMY_DATABASE_URL = f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}'
