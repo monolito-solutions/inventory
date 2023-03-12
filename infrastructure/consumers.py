@@ -7,6 +7,7 @@ import asyncio
 from pulsar.schema import *
 from utils import broker_host
 from modules.inventory.application.logic.inventory import check_inventory
+from modules.inventory.application.logic.inventory_rollback import revert_inventory
 
 
 async def subscribe_to_topic(topic: str, subscription: str, schema: Record, consumer_type: _pulsar.ConsumerType = _pulsar.ConsumerType.Shared):
@@ -27,6 +28,9 @@ async def subscribe_to_topic(topic: str, subscription: str, schema: Record, cons
                     if (datos.type == "CommandCheckInventory") :
                         print(f'\nEvent type: {datos.type}')
                         check_inventory(order=datos.data_payload)
+                    elif (datos.type == "RevertInventory") :
+                        print(f'\nEvent type: {datos.type}')
+                        revert_inventory(order=datos.data_payload)
 
                     await consumer.acknowledge(mensaje)
 

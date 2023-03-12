@@ -13,6 +13,7 @@ from modules.products.domain.entities import Product
 
 def check_inventory(order):
     try:
+        order_is_ok = True
         db = get_db()
 
         params = Order(
@@ -35,6 +36,15 @@ def check_inventory(order):
                 print(f'\Si hay inventario para el producto: {item["product_id"]}')
                 inventory_tmp.quantity -= item["quantity"]
                 repository.update(inventory_tmp)
+            else:
+                print(f'\Si NO hay inventario para el producto: {item["product_id"]}')
+                order_is_ok = False
+                break
+            
+        if(order_is_ok == True):
+            order_success()
+        else:
+            order_error()
         
         db.close()
     except IntegrityError:
@@ -43,6 +53,7 @@ def check_inventory(order):
         raise BaseAPIException(f"Error checking order : {e}", 500)
 
 
+def order_success(order):
     event_payload = InventoryCheckedPayload(
         order_id = str(order.order_id),
         customer_id = str(order.customer_id),
@@ -73,3 +84,26 @@ def check_inventory(order):
     dispatcher = Dispatcher()
     dispatcher.publish_message(event, "order-events")
     dispatcher.publish_message(command, "order-commands")
+
+
+def order_error(order):
+    event_payload = ErrorCheckingInventoryPayload(
+        order_id = str(order.order_id),
+        customer_id = str(order.customer_id),
+        order_date = str(order.order_date),
+        order_status = str(order.order_status),
+        order_items = order.order_items,
+        order_total = float(order.order_total),
+        order_version = int(order.order_version)
+    )
+    event_payload.order_status = "Error checking orders products"
+
+    event = EventErrorCheckingInventory(
+        time = utils.time_millis(),
+        ingestion = utils.time_millis(),
+        datacontenttype = ErrorCheckingInventoryPayload.__name__,
+        data_payload = event_payload
+    )
+
+    dispatcher = Dispatcher()
+    dispatcher.publish_message(event, "order-events")
