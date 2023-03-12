@@ -12,9 +12,8 @@ from modules.inventory.domain.entities import Inventory, Order
 from modules.products.domain.entities import Product
 
 def revert_inventory(order):
+    db = get_db()
     try:
-        db = get_db()
-
         params = Order(
             order_id = order.order_id,
             customer_id = order.customer_id,
@@ -35,30 +34,9 @@ def revert_inventory(order):
             inventory_tmp.quantity += item["quantity"]
             repository.update(inventory_tmp)
         
-        db.close()
     except IntegrityError:
         raise BaseAPIException(f"Error rollback order products", 400)
     except Exception as e:
         raise BaseAPIException(f"Error rollback order : {e}", 500)
-
-
-    event_payload = RevertInventoryPayload(
-        order_id = str(order.order_id),
-        customer_id = str(order.customer_id),
-        order_date = str(order.order_date),
-        order_status = str(order.order_status),
-        order_items = order.order_items,
-        order_total = float(order.order_total),
-        order_version = int(order.order_version)
-    )
-    event_payload.order_status = "Error checking inventory"
-
-    event = EventRevertInventory(
-        time = utils.time_millis(),
-        ingestion = utils.time_millis(),
-        datacontenttype = RevertInventorydPayload.__name__,
-        data_payload = event_payload
-    )
-
-    dispatcher = Dispatcher()
-    dispatcher.publish_message(event, "order-events")
+    finally:
+        db.close()
